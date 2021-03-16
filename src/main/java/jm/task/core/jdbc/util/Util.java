@@ -16,12 +16,19 @@ public class Util {
     private static final String LOGIN = "root";
     private static final String PASSWORD = "drakedog";
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static Util instance;
     private static Connection connection;
     private static SessionFactory sessionFactory;
 
     private Util() {
     }
-    public static SessionFactory getSessionFactory() {
+    public static Util getInstance(){
+        if(instance == null){
+            instance = new Util();
+        }
+        return instance;
+    }
+    public  SessionFactory getSessionFactory() {
 
         if (sessionFactory == null) {
             Properties properties = new Properties();
@@ -46,7 +53,7 @@ public class Util {
         return sessionFactory;
     }
 
-    public static Connection getConnection(){
+    public  Connection getConnection(){
         if(connection == null) {
             try {
                 Class.forName(DRIVER);
