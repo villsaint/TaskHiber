@@ -2,12 +2,10 @@ package jm.task.core.jdbc.util;
 
 import jm.task.core.jdbc.model.User;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,7 +24,6 @@ public class Util {
     public static SessionFactory getSessionFactory() {
 
         if (sessionFactory == null) {
-            Configuration configuration = new Configuration();
             Properties properties = new Properties();
             properties.put(Environment.DRIVER, DRIVER);
             properties.put(Environment.URL, URL);
@@ -35,19 +32,18 @@ public class Util {
             properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
             properties.put(Environment.SHOW_SQL, "false");
 
+            Configuration configuration = new Configuration();
             configuration.setProperties(properties);
             configuration.addAnnotatedClass(User.class);
 
-            sessionFactory = createSessionFactory(configuration);
+            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+            builder.applySettings(configuration.getProperties());
+            ServiceRegistry serviceRegistry = builder.build();
+
+            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
             return sessionFactory;
         }
         return sessionFactory;
-    }
-    private static SessionFactory createSessionFactory(Configuration configuration){
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-        builder.applySettings(configuration.getProperties());
-        ServiceRegistry serviceRegistry = builder.build();
-        return configuration.buildSessionFactory(serviceRegistry);
     }
 
     public static Connection getConnection(){

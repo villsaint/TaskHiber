@@ -13,9 +13,7 @@ import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
     public UserDaoHibernateImpl() {
-
     }
-
 
     @Override
     public void createUsersTable() {
@@ -57,7 +55,6 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (HibernateException  e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -76,13 +73,13 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        List list = new ArrayList<>();
+        List <User>list = new ArrayList<>();
         try {
             Session session = Util.getSessionFactory().openSession();
             Query query = session.createQuery("FROM User");
-            list = query.list();
+            list = (List<User>)query.list();
             session.close();
-            return (List<User>) list;
+            return list;
         } catch (HibernateException  e) {
             e.printStackTrace();
         }
