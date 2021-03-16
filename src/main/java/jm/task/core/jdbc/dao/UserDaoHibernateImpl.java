@@ -5,9 +5,6 @@ import jm.task.core.jdbc.util.Util;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +89,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             Session session = util.getSessionFactory().openSession();
             session.beginTransaction();
-            session.createQuery("delete from User").executeUpdate();
+            session.createQuery("TRUNCATE table User").executeUpdate();
             session.getTransaction().commit();
             session.close();
         } catch (HibernateException  e) {
